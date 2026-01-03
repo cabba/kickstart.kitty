@@ -1,11 +1,26 @@
 format="""
 $directory\
 $git_branch\
+${custom.git_user}\
 $python\
 $character
 """
 
 add_newline = false
+
+[custom.git_user]
+description = "Display user of the current git repo"
+command = """
+GIT_REMOTE=$(command git ls-remote --get-url 2> /dev/null)
+user=${GIT_REMOTE#*:}
+user=${user%%/*}
+echo "${user}"
+"""
+when = 'git rev-parse --is-inside-work-tree'
+format='[$symbol($output )]($style)'
+symbol=' '
+style="bold blue"
+
 
 [aws]
 symbol = "  "
